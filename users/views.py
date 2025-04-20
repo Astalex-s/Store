@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
+from products.models import Basket
 
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 from django.contrib import auth, messages
@@ -42,7 +43,11 @@ def profile(request):
             print(form.errors)
     else:
         form = UserProfileForm(instance=request.user)
-    context = {'title': 'Store - Профиль', 'form': form}
+    context = {
+        'title': 'Store - Профиль',
+        'form': form,
+        'baskets': Basket.objects.all(),
+    }
     return render(request, 'users/profile.html', context)
 
 def logout(request):
