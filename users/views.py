@@ -1,19 +1,23 @@
-from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy, reverse
-from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView, UpdateView
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
-from products.models import Basket
-from users.models import User, EmailVerification
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import TemplateView
+from django.views.generic.edit import CreateView, UpdateView
+
 from common.views import TitleMixin
+from products.models import Basket
+from users.forms import UserLoginForm, UserProfileForm, UserRegistrationForm
+from users.models import EmailVerification, User
+
 # Create your views here.
+
 
 class UserLoginView(TitleMixin, LoginView):
     template_name = 'users/login.html'
     form_class = UserLoginForm
     title = 'Store-Авторизация'
+
 
 class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
     model = User
@@ -38,6 +42,7 @@ class UserProfileView(TitleMixin, UpdateView):
         context['baskets'] = Basket.objects.filter(user=self.object)
         return context
 
+
 class EmailVerificationView(TitleMixin, TemplateView):
     title = 'Store - Подтверждение электронной почты'
     template_name = 'users/email_verification.html'
@@ -52,4 +57,3 @@ class EmailVerificationView(TitleMixin, TemplateView):
             return super(EmailVerificationView, self).get(request, *args, **kwargs)
         else:
             return HttpResponseRedirect(reverse('index'))
-

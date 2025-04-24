@@ -1,5 +1,7 @@
 from django.db import models
+
 from users.models import User
+
 
 # Create your models here.
 class ProductCategory(models.Model):
@@ -29,6 +31,7 @@ class Product(models.Model):
     def __str__(self):
         return f'Продукт: {self.name} | Категория: {self.category.name}'
 
+
 class BasketQuerySet(models.QuerySet):
     def total_sum(self):
         return sum(basket.sum() for basket in self)
@@ -50,6 +53,3 @@ class Basket(models.Model):
 
     def sum(self):
         return self.product.price * self.quantity
-
-
-
